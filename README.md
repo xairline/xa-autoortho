@@ -1,2 +1,1 @@
-# xa-snow
 # xa-autoortho
