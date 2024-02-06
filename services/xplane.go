@@ -9,7 +9,7 @@ import (
 	"github.com/xairline/goplane/extra"
 	"github.com/xairline/goplane/xplm/processing"
 	"github.com/xairline/goplane/xplm/utilities"
-	"github.com/xairline/xa-snow/utils/logger"
+	"github.com/xairline/xa-autoortho/utils/logger"
 	"os"
 	"os/exec"
 	"path/filepath"

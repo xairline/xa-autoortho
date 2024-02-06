@@ -3,7 +3,7 @@ package services
 //go:generate mockgen -destination=./__mocks__/Autoortho.go -package=mocks -source=Autoortho.go
 import (
 	"context"
-	"github.com/xairline/xa-snow/utils/logger"
+	"github.com/xairline/xa-autoortho/utils/logger"
 	"gopkg.in/ini.v1"
 	"log"
 	"os"
