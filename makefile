@@ -43,7 +43,7 @@ lin:
 	CGO_LDFLAGS="-shared -rdynamic -nodefaultlibs -undefined_warning" \
 	go build -buildmode c-shared -o build/XA-autoortho/lin.xpl main.go
 
-all: mac
+all: mac lin win
 	rm -rf build/XA-autoortho/mac_arm.xpl build/XA-autoortho/mac_amd.xpl
 	rm -rf build/*.zip
 	cp config build/XA-autoortho/config

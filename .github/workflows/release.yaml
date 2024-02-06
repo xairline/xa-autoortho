@@ -37,10 +37,10 @@ jobs:
       - run: |
           go mod tidy
           make all -j 3
-          rm -f ${{ github.workspace }}/build/XA-snow/mac_arm.xpl ${{ github.workspace }}/build/XA-snow/mac_amd.xpl
-          cp -r bin ${{ github.workspace }}/build/XA-snow/
+          rm -f ${{ github.workspace }}/build/XA-autoortho/mac_arm.xpl ${{ github.workspace }}/build/XA-autoortho/mac_amd.xpl
+          cp -r bin ${{ github.workspace }}/build/XA-autoortho/
           root=$(pwd)
-          cd ${{ github.workspace }}/build/ && zip -r xa-snow.zip XA-snow && cd $root
+          cd ${{ github.workspace }}/build/ && zip -r xa-autoortho.zip XA-autoortho && cd $root
 
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -48,5 +48,5 @@ jobs:
         with:
           body_path: ${{ github.workspace }}/README.md
           files: |
-            ${{ github.workspace }}/build/xa-snow.zip
+            ${{ github.workspace }}/build/xa-autoortho.zip
           prerelease: false
