@@ -38,7 +38,7 @@ lin:
 	GOOS=linux \
 	GOARCH=amd64 \
 	CGO_ENABLED=1 \
-	CC=/opt/homebrew/bin/x86_64-linux-musl-cc \
+	CC=/usr/local/bin/x86_64-linux-musl-cc \
 	CGO_CFLAGS="-DLIN=1 -O0 -g" \
 	CGO_LDFLAGS="-shared -rdynamic -nodefaultlibs -undefined_warning" \
 	go build -buildmode c-shared -o build/XA-autoortho/lin.xpl main.go
