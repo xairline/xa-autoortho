@@ -34,20 +34,6 @@ func (m *MockXplaneService) EXPECT() *MockXplaneServiceMockRecorder {
 	return m.recorder
 }
 
-// flightLoop mocks base method.
-func (m *MockXplaneService) flightLoop(elapsedSinceLastCall, elapsedTimeSinceLastFlightLoop float32, counter int, ref interface{}) float32 {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "flightLoop", elapsedSinceLastCall, elapsedTimeSinceLastFlightLoop, counter, ref)
-	ret0, _ := ret[0].(float32)
-	return ret0
-}
-
-// flightLoop indicates an expected call of flightLoop.
-func (mr *MockXplaneServiceMockRecorder) flightLoop(elapsedSinceLastCall, elapsedTimeSinceLastFlightLoop, counter, ref interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "flightLoop", reflect.TypeOf((*MockXplaneService)(nil).flightLoop), elapsedSinceLastCall, elapsedTimeSinceLastFlightLoop, counter, ref)
-}
-
 // onPluginStart mocks base method.
 func (m *MockXplaneService) onPluginStart() {
 	m.ctrl.T.Helper()
