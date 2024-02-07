@@ -48,7 +48,7 @@ func (a *autoorthoService) LaunchAutoortho() error {
 		go func(mount string) {
 			defer a.wg.Done()
 			poisonFile := path.Join(strings.Split(mount, "|")[0], ".poison")
-			file, err := os.OpenFile(path.Join(current.HomeDir, "autoortho.log"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+			file, err := os.OpenFile(path.Join(current.HomeDir, ".autoortho-data", "logs", "autoortho.log"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 			if err != nil {
 				log.Fatalf("failed to open file: %v", err)
 			}
