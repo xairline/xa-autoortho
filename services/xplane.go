@@ -7,7 +7,6 @@ package services
 import (
 	"github.com/joho/godotenv"
 	"github.com/xairline/goplane/extra"
-	"github.com/xairline/goplane/xplm/processing"
 	"github.com/xairline/goplane/xplm/utilities"
 	"github.com/xairline/xa-autoortho/utils/logger"
 	"os"
@@ -21,8 +20,6 @@ type XplaneService interface {
 	onPluginStateChanged(state extra.PluginState, plugin *extra.XPlanePlugin)
 	onPluginStart()
 	onPluginStop()
-	// flight loop
-	flightLoop(elapsedSinceLastCall, elapsedTimeSinceLastFlightLoop float32, counter int, ref interface{}) float32
 }
 
 type xplaneService struct {
@@ -99,21 +96,9 @@ func (s *xplaneService) onPluginStart() {
 	if err != nil {
 		s.Logger.Errorf("Some error occured. Err: %s", err)
 	}
-
-	processing.RegisterFlightLoopCallback(s.flightLoop, -1, nil)
 }
 
 func (s *xplaneService) onPluginStop() {
 	s.AutoorthoSvc.Umount()
 	s.Logger.Info("Plugin stopped")
-}
-
-func (s *xplaneService) flightLoop(
-	elapsedSinceLastCall,
-	elapsedTimeSinceLastFlightLoop float32,
-	counter int,
-	ref interface{},
-) float32 {
-	//s.AutoorthoSvc.GetStats()
-	return 5
 }

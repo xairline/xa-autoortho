@@ -6,8 +6,8 @@ import (
 	"github.com/xairline/goplane/extra/logging"
 	"github.com/xairline/goplane/xplm/plugins"
 	"github.com/xairline/goplane/xplm/utilities"
-	"github.com/xairline/xa-snow/services"
-	"github.com/xairline/xa-snow/utils/logger"
+	"github.com/xairline/xa-autoortho/services"
+	"github.com/xairline/xa-autoortho/utils/logger"
 	"path/filepath"
 )
 

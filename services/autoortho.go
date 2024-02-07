@@ -33,6 +33,7 @@ type autoorthoService struct {
 }
 
 func (a *autoorthoService) Umount() {
+	a.Logger.Infof("Autoortho service is stopping: Umount")
 	a.cancel()
 	a.wg.Wait()
 }
@@ -42,12 +43,12 @@ func (a *autoorthoService) LaunchAutoortho() error {
 	a.Logger.Infof("Mounts: %v", mounts)
 	autoUnmount := os.Getenv("AUTO_UNMOUNT")
 	a.Logger.Infof("Auto unmount: %s", autoUnmount)
-	user, _ := user.Current()
+	current, _ := user.Current()
 	for _, mount := range mounts {
 		a.wg.Add(1)
 		go func(mount string) {
 			defer a.wg.Done()
-			file, err := os.OpenFile(path.Join(user.HomeDir, "autoortho.log"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+			file, err := os.OpenFile(path.Join(current.HomeDir, "autoortho.log"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 			if err != nil {
 				log.Fatalf("failed to open file: %v", err)
 			}
@@ -67,7 +68,11 @@ func (a *autoorthoService) LaunchAutoortho() error {
 			}
 			select {
 			case <-a.ctx.Done():
+				a.Logger.Infof("Autoortho service is stopping")
 				if autoUnmount == "true" {
+					poisonFile := path.Join(strings.Split(mount, "|")[0], ".poison")
+					a.Logger.Infof("Creating poison file: %s", poisonFile)
+					os.Stat(poisonFile)
 					if cmd.Process != nil {
 						err := cmd.Process.Signal(os.Interrupt)
 						if err != nil {
