@@ -1,0 +1,10 @@
+refuse
+psutil
+freesimplegui
+Flask
+flask-socketio
+eventlet
+packaging
+requests
+geocoder
+pytest

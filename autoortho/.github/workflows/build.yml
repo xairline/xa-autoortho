@@ -1,0 +1,10 @@
+name: Build
+
+on:
+  pull_request:
+
+jobs:
+  build: 
+    uses: ./.github/workflows/build_release.yml
+    with:
+      version: ${{ github.head_ref || github.ref_name }}

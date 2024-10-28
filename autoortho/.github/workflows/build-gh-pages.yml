@@ -1,0 +1,59 @@
+name: Deploy Docs with mkdocs 
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+  #  tags:
+  #    - '*'
+  release:
+    types:
+      - released
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  
+  #pull_request:  
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+  #pull-requests: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  # Setup
+
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # fetch all commits/branches
+
+      - name: Setup
+        run: |
+          python3 -m pip install mkdocs-material mike
+
+      - name: Configure
+        run: |
+          git config --global user.name Doc Deploy
+          git config --global user.email docs@email.com
+
+      - name: Publish Tag as latest
+        if: ${{ github.ref_type == 'tag' }}
+        run: |
+          mike deploy --push --update-aliases ${{ github.ref_name }} latest
+
+      - name: Publish main as unstable
+        if: ${{ github.ref_type == 'branch' }}
+        run: |
+          mike deploy --push --update-aliases unstable

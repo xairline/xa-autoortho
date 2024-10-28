@@ -1,0 +1,17 @@
+*~
+*.swp
+__pycache__
+autoortho.log
+out.dds
+/cache
+**/libjpeg-turbo-gcc64
+tags
+__main__.*
+autoortho.*
+build/
+cache/
+downloads/
+release/
+*.bin
+.version
+venv
