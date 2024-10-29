@@ -9,12 +9,16 @@
 
 ## Features
 
-[ ] remove Python phase 1 (pack all dependencies in a binary)
+- [x] remove Python phase 1 (pack all dependencies in a binary)
 
-[ ] add seasonal adjustment for ortho images
+- [] add seasonal adjustment for ortho images
 
-[ ] new ui in xplane
+- [] allow install new scenery
 
-[ ] auto mount with xplane loading
+- [] new ui in xplane
 
-[ ] complete remove Python
+- [] auto mount with xplane loading
+
+- [] complete remove Python
+
+- [] support new xplane format
