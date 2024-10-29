@@ -5,12 +5,9 @@ package services
 //go:generate mockgen -destination=./__mocks__/xplane.go -package=mocks -source=xplane.go
 
 import (
-	"github.com/joho/godotenv"
 	"github.com/xairline/goplane/extra"
 	"github.com/xairline/goplane/xplm/utilities"
 	"github.com/xairline/xa-autoortho/utils/logger"
-	"os"
-	"os/exec"
 	"path/filepath"
 	"sync"
 )
@@ -68,31 +65,9 @@ func (s *xplaneService) onPluginStart() {
 	s.Logger.Info("Plugin started")
 	systemPath := utilities.GetSystemPath()
 	pluginPath := filepath.Join(systemPath, "Resources", "plugins", "XA-autoortho")
-	err := godotenv.Load(filepath.Join(pluginPath, "config"))
-	if err != nil {
-		s.Logger.Errorf("Some error occured. Err: %s", err)
-	}
-	autoortho_dir := os.Getenv("AUTOORTHO_DIR")
-	if autoortho_dir == "" {
-		s.Logger.Errorf("AUTOORTHO_DIR is not set")
-	}
-	s.Logger.Infof("Autoortho dir: %s", autoortho_dir)
 
-	python_executable := os.Getenv("PYTHON_EXECUTABLE")
-	if python_executable == "" {
-		s.Logger.Warningf("PYTHON_VIRTUALENV is not set")
-		// get default python executable
-		python_executable = "python3"
-		output, err := exec.Command("which", python_executable).CombinedOutput()
-		if err != nil {
-			s.Logger.Errorf("Can't find python! Some error occured. Err: %s", err)
-		}
-		python_executable = string(output)
-	}
-	s.Logger.Infof("Python executable: %s", python_executable)
-
-	s.AutoorthoSvc = NewAutoorthoService(s.Logger, autoortho_dir, python_executable)
-	err = s.AutoorthoSvc.LaunchAutoortho()
+	s.AutoorthoSvc = NewAutoorthoService(s.Logger, pluginPath)
+	err := s.AutoorthoSvc.LaunchAutoortho()
 	if err != nil {
 		s.Logger.Errorf("Some error occured. Err: %s", err)
 	}

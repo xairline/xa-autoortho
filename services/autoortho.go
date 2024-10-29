@@ -24,12 +24,11 @@ type AutoorthoService interface {
 }
 
 type autoorthoService struct {
-	Logger logger.Logger
-	dir    string
-	pyPath string
-	ctx    context.Context
-	cancel context.CancelFunc
-	wg     sync.WaitGroup
+	Logger     logger.Logger
+	pluginPath string
+	ctx        context.Context
+	cancel     context.CancelFunc
+	wg         sync.WaitGroup
 }
 
 func (a *autoorthoService) Umount() {
@@ -40,8 +39,6 @@ func (a *autoorthoService) Umount() {
 func (a *autoorthoService) LaunchAutoortho() error {
 	mounts := a.getMounts()
 	a.Logger.Infof("Mounts: %v", mounts)
-	autoUnmount := os.Getenv("AUTO_UNMOUNT")
-	a.Logger.Infof("Auto unmount: %s", autoUnmount)
 	current, _ := user.Current()
 	for _, mount := range mounts {
 		a.wg.Add(1)
@@ -55,8 +52,7 @@ func (a *autoorthoService) LaunchAutoortho() error {
 			defer file.Close()
 			os.Remove(poisonFile)
 			cmd := exec.Command(
-				a.pyPath,
-				a.dir+"/autoortho/autoortho_fuse.py",
+				a.pluginPath+"/autoortho_fuse",
 				strings.Split(mount, "|")[0],
 				strings.Split(mount, "|")[1],
 			)
@@ -70,13 +66,11 @@ func (a *autoorthoService) LaunchAutoortho() error {
 			select {
 			case <-a.ctx.Done():
 				a.Logger.Infof("Autoortho service is stopping: %s", strings.Split(mount, "|")[1])
-				if autoUnmount == "true" {
-					a.Logger.Infof("Creating poison file: %s", poisonFile)
-					poisonFile := path.Join(strings.Split(mount, "|")[1], ".poison")
-					_, err := os.Create(poisonFile)
-					if err != nil {
-						a.Logger.Errorf("Error creating poison file: %v", err)
-					}
+				a.Logger.Infof("Creating poison file: %s", poisonFile)
+				poisonFile := path.Join(strings.Split(mount, "|")[1], ".poison")
+				_, err := os.Create(poisonFile)
+				if err != nil {
+					a.Logger.Errorf("Error creating poison file: %v", err)
 				}
 				a.wg.Done()
 			}
@@ -128,7 +122,7 @@ func (a *autoorthoService) getMounts() []string {
 	return res
 }
 
-func NewAutoorthoService(logger logger.Logger, dir string, pyPath string) AutoorthoService {
+func NewAutoorthoService(logger logger.Logger, pluginPath string) AutoorthoService {
 	if autoorthoSvc != nil {
 		logger.Info("Autoortho SVC has been initialized already")
 		return autoorthoSvc
@@ -136,14 +130,12 @@ func NewAutoorthoService(logger logger.Logger, dir string, pyPath string) Autoor
 		logger.Info("Autoortho SVC: initializing")
 		autoorthoSvcLock.Lock()
 		defer autoorthoSvcLock.Unlock()
-		logger.Infof("Autoortho SVC: initializing with folder %s", dir)
 		ctx, cancel := context.WithCancel(context.Background())
 		autoorthoSvc = &autoorthoService{
-			Logger: logger,
-			dir:    dir,
-			pyPath: pyPath,
-			ctx:    ctx,
-			cancel: cancel,
+			Logger:     logger,
+			pluginPath: pluginPath,
+			ctx:        ctx,
+			cancel:     cancel,
 		}
 		return autoorthoSvc
 	}

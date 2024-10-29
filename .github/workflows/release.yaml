@@ -38,7 +38,23 @@ jobs:
           go mod tidy
           make all -j 3
           rm -f ${{ github.workspace }}/build/XA-autoortho/mac_arm.xpl ${{ github.workspace }}/build/XA-autoortho/mac_amd.xpl
+          
+
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.12'
+
+      - name: Setup
+        run: |
+          brew install python-tk@3.12
+          python3.10 -m pip install -U -r requirements.txt
+          python3.10 -m pip install -U -r requirements-build.txt
+          cd autoortho
+          pyinstaller autoortho_fuse.spec
+
+      - run: |
           root=$(pwd)
+          cp autoortho/dist/autoortho_fuse ${{ github.workspace }}/build/XA-autoortho/
           cd ${{ github.workspace }}/build/ && zip -r xa-autoortho.zip XA-autoortho && cd $root
 
       - name: Release
