@@ -13,12 +13,12 @@
 
 - [ ] add seasonal adjustment for ortho images
 
-- [] allow install new scenery
+- [ ] allow install new scenery
 
-- [] new ui in xplane
+- [ ] new ui in xplane
 
-- [] auto mount with xplane loading
+- [ ] auto mount with xplane loading
 
-- [] complete remove Python
+- [ ] complete remove Python
 
-- [] support new xplane format
+- [ ] support new xplane format
