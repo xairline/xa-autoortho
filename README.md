@@ -1,13 +1,16 @@
 # xa-autoortho
 
 
-I am lazy, and i don't want to use UI or even terminal 
-to launch autoOrtho every time.
+>NOTE: WIP MAJOR REFACTORING IN PROGRESS
 
-https://youtu.be/jCHWjTv9viQ
+>NOTE: ONLY WORKS ON MAC SILICON
 
-So here i am, a plugin to automatically launch autoOrtho 
-when you open X-Plane
+>NOTE: DO NOT USE UNLESS YOU HAVE TALKED TO ME
 
-## MAC OS X only!
-Linux should work but not tested. Windows is likely having issues.
+## Features
+
+[] remove Python phase 1 (pack all dependencies in a binary)
+[] add seasonal adjustment for ortho images
+[] new ui in xplane
+[] auto mount with xplane loading
+[] complete remove Python
