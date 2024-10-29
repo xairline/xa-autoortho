@@ -26,8 +26,6 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: '^1.18' # The Go version to download (if necessary) and use.
-      - run: brew install FiloSottile/musl-cross/musl-cross
-      - run: brew install mingw-w64
       - uses: actions/cache@v2
         with:
           path: ~/go/pkg/mod
@@ -36,9 +34,8 @@ jobs:
             go-mod-
       - run: |
           go mod tidy
-          make all -j 3
+          make mac -j 3
           rm -f ${{ github.workspace }}/build/XA-autoortho/mac_arm.xpl ${{ github.workspace }}/build/XA-autoortho/mac_amd.xpl
-          
 
       - uses: actions/setup-python@v3
         with:
