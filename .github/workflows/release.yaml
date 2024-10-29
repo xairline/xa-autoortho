@@ -44,10 +44,12 @@ jobs:
       - name: Setup
         run: |
           brew install python-tk@3.12
+          root=$(pwd)
+          cd autoortho
           python3.12 -m pip install -U -r requirements.txt
           python3.12 -m pip install -U -r requirements-build.txt
-          cd autoortho
           pyinstaller autoortho_fuse.spec
+          cd $root
 
       - run: |
           root=$(pwd)
