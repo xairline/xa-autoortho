@@ -11,7 +11,7 @@
 
 - [x] remove Python phase 1 (pack all dependencies in a binary)
 
-- [] add seasonal adjustment for ortho images
+- [ ] add seasonal adjustment for ortho images
 
 - [] allow install new scenery
 
