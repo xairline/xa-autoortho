@@ -1,5 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
-
+import sys
+import os
+import certifi
 
 a1 = Analysis(
     ['autoortho/autoortho.py'],
