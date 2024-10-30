@@ -7,7 +7,9 @@ a1 = Analysis(
     binaries=[
     ('autoortho/imgs/splash.png','imgs'),
     ('autoortho/imgs/banner1.png','imgs')],
-    datas=[],
+    datas=[
+         (certifi.where(), '.'),
+    ],
     hiddenimports=['FreeSimpleGUI'],
     hookspath=[],
     hooksconfig={},
@@ -52,7 +54,9 @@ a = Analysis(
     pathex=[],
     binaries=[('autoortho/lib/darwin_arm/libispc_texcomp.dylib', '.'),  # Adjust destination path if needed
                       ('autoortho/aoimage/aoimage.dylib', '.')],
-    datas=[],
+    datas=[
+         (certifi.where(), '.'),
+    ],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

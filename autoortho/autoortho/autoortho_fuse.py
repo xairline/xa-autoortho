@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 
 # from __future__ import with_statement
+import os
 
+import certifi
+
+os.environ['SSL_CERT_FILE'] = certifi.where()
 import ctypes
 import errno
 import logging

@@ -1,7 +1,10 @@
 #!/usr/bin/env python
+import os
 
+import certifi
+
+os.environ['SSL_CERT_FILE'] = certifi.where()
 import argparse
-import ctypes
 import logging
 import os
 import platform
