@@ -48,6 +48,7 @@ jobs:
           cd autoortho
           python3.12 -m pip install -U -r requirements.txt
           python3.12 -m pip install -U -r requirements-build.txt
+          ls /Users/runner/work/xa-autoortho/xa-autoortho/autoortho/autoortho
           pyinstaller autoortho.spec
           cd $root
 
