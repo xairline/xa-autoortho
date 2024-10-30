@@ -4,7 +4,7 @@ import os
 import certifi
 
 a1 = Analysis(
-    ['autoortho/autoortho.py'],
+    ['autoortho/__main__.py'],
     pathex=[],
     binaries=[
     ('autoortho/imgs/splash.png','imgs'),
