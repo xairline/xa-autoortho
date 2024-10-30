@@ -48,9 +48,9 @@ jobs:
           cd autoortho
           python3.12 -m pip install -U -r requirements.txt
           python3.12 -m pip install -U -r requirements-build.txt
-          pyinstaller autoortho_fuse.spec
-          echo "========$(pwd)=========="
           pyinstaller autoortho.spec
+          echo "========$(pwd)=========="
+          pyinstaller autoortho_fuse.spec
           cd $root
 
       - run: |
