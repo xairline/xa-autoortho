@@ -352,7 +352,7 @@ class ConfigUI(object):
 
     def stop(self):
         self.running = False
-        self.unmount_sceneries()
+        # self.unmount_sceneries()
         self.window.close()
 
     def update_logs(self):
