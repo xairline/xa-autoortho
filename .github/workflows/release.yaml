@@ -55,6 +55,7 @@ jobs:
       - run: |
           root=$(pwd)
           cp autoortho/dist/autoortho_fuse ${{ github.workspace }}/build/XA-autoortho/
+          cp autoortho/dist/autoortho ${{ github.workspace }}/build/XA-autoortho/
           cp -r autoortho/dist/autoortho.app ${{ github.workspace }}/build/XA-autoortho/
           cd ${{ github.workspace }}/build/ && zip -r xa-autoortho.zip XA-autoortho && cd $root
 
