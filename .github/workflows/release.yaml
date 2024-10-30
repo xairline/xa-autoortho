@@ -49,11 +49,14 @@ jobs:
           python3.12 -m pip install -U -r requirements.txt
           python3.12 -m pip install -U -r requirements-build.txt
           pyinstaller autoortho_fuse.spec
+          pyinstaller autoortho.spec
           cd $root
 
       - run: |
           root=$(pwd)
           cp autoortho/dist/autoortho_fuse ${{ github.workspace }}/build/XA-autoortho/
+          cp autoortho/dist/autoortho ${{ github.workspace }}/build/XA-autoortho/
+          cp autoortho/dist/autoortho.app ${{ github.workspace }}/build/XA-autoortho/
           cd ${{ github.workspace }}/build/ && zip -r xa-autoortho.zip XA-autoortho && cd $root
 
       - name: Release

@@ -20,6 +20,8 @@ import downloader
 from version import __version__
 
 CUR_PATH = os.path.dirname(os.path.realpath(__file__))
+if hasattr(sys, '_MEIPASS'):
+    CUR_PATH = sys._MEIPASS
 
 
 class ConfigUI(object):
