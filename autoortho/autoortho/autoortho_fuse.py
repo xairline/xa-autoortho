@@ -485,7 +485,7 @@ if __name__ == '__main__':
     parser.add_argument('mount')
     args = parser.parse_args()
 
-    logging.basicConfig(level=logging.ERROR)
+    logging.basicConfig(level=logging.INFO)
     ao = AutoOrtho(args.root)
 
     fuse = FUSE(ao, args.mount, foreground=True, allow_other=True)
