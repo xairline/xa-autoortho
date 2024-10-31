@@ -34,3 +34,13 @@
 
     > NOTE: UI IS ONLY FOR INSTALLING REGIONS OR CHANGING CONFIG
 6. once 5 is done, launch xplane
+
+## How to get support
+Submit the following information:
+
+1. XPlane Logs
+2. AutoOrtho Logs
+```shell
+~/.autoortho-data/logs/autoortho.log
+```
+3. If you have UI issue, submit the console log of UI, aka output in the terminal when you run the UI
