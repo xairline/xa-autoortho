@@ -252,7 +252,7 @@ class ConfigUI(object):
             ],
             [sg.Text(key='-EXPAND-', font='ANY 1', pad=(0, 0))],
             [sg.StatusBar("...", size=(74, 3), key="status", auto_size_text=True, expand_x=True)],
-            [sg.Button('Run'), sg.Button('Save'), sg.Button('Quit')]
+            [sg.Button('Save'), sg.Button('Quit')]
             # [sg.StatusBar("...", size=(80,3), key="status", auto_size_text=True, expand_x=True)],
 
         ]

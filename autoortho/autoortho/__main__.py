@@ -13,8 +13,6 @@ from aoconfig import CFG
 
 if hasattr(sys, '_MEIPASS'):
     CUR_PATH = sys._MEIPASS
-    print(CUR_PATH)
-    print(certifi.where())
 
 def setuplogs():
     log_dir = os.path.join(os.path.expanduser("~"), ".autoortho-data", "logs")
