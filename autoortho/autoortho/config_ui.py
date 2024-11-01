@@ -177,13 +177,24 @@ class ConfigUI(object):
                     metadata={'section': self.cfg.coloring}
                 ),
             ],
+            [
+                sg.Text('Min Zoom Level'),
+                sg.Slider(
+                    range=(0, 20, 1),
+                    default_value=self.cfg.autoortho.min_zoom,
+                    key='min_zoom',
+                    size=(20, 15),
+                    orientation='horizontal',
+                    metadata={'section': self.cfg.autoortho}
+                ),
+            ],
             # [
             #    sg.Checkbox('Cleanup cache on start', key='clean_on_start',
             #        default=self.cfg.cache.clean_on_start,
             #        metadata={'section':self.cfg.cache}
             #    ),
             # ],
-            [sg.HorizontalSeparator(pad=5)],
+            [sg.HorizontalSeparator(pad=6)],
 
         ]
 
@@ -416,6 +427,7 @@ class ConfigUI(object):
         # Pull info from UI into AOConfig object and save config
         self.ready.clear()
         event, values = self.window.read(timeout=10)
+        values["min_zoom"] = int(values["min_zoom"])
         # print(f"Reading values: {values}")
         # print(f"Reading events: {event}")
         for k, v in values.items():
