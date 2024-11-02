@@ -29,14 +29,8 @@ jobs:
       - name: Build Go Binaries
         run: |
           go mod tidy
-          # Build for amd64
-          env GOOS=darwin GOARCH=amd64 go build -o build/XA-autoortho/yourapp_amd64
-          # Build for arm64
-          env GOOS=darwin GOARCH=arm64 go build -o build/XA-autoortho/yourapp_arm64
-          # Combine into universal binary
-          lipo -create -output build/XA-autoortho/yourapp build/XA-autoortho/yourapp_amd64 build/XA-autoortho/yourapp_arm64
-          # Clean up individual binaries
-          rm build/XA-autoortho/yourapp_amd64 build/XA-autoortho/yourapp_arm64
+          make mac -j 3
+          rm -f ${{ github.workspace }}/build/XA-autoortho/mac_arm.xpl ${{ github.workspace }}/build/XA-autoortho/mac_amd.xpl
 
       - uses: actions/setup-python@v3
         with:
@@ -53,20 +47,23 @@ jobs:
           # Build for amd64
           python3.12 -m PyInstaller --target-arch x86_64 autoortho.spec
           mv autoortho/dist/autoortho autoortho/dist/autoortho_amd64
+          mv autoortho/dist/autoortho_fuse autoortho/dist/autoortho_fuse_amd64
           # Build for arm64
           python3.12 -m PyInstaller --target-arch arm64 autoortho.spec
           mv autoortho/dist/autoortho autoortho/dist/autoortho_arm64
+          mv autoortho/dist/autoortho_fuse autoortho/dist/autoortho_fuse_arm64
           # Combine into universal binary
           lipo -create -output autoortho/dist/autoortho autoortho/dist/autoortho_amd64 autoortho/dist/autoortho_arm64
+          lipo -create -output autoortho/dist/autoortho_fuse autoortho/dist/autoortho_fuse_amd64 autoortho/dist/autoortho_fuse_arm64
           # Clean up individual builds
-          rm -rf autoortho/dist/autoortho_amd64 autoortho/dist/autoortho_arm64
+          rm -rf autoortho/dist/autoortho_amd64 autoortho/dist/autoortho_arm64 autoortho/dist/autoortho_fuse_amd64 autoortho/dist/autoortho_fuse_arm64
 
       - name: Prepare Release Artifacts
         run: |
           root=$(pwd)
           cp autoortho/dist/autoortho_fuse build/XA-autoortho/
           cp autoortho/dist/autoortho build/XA-autoortho/
-          cp -r autoortho/dist/autoortho.app build/XA-autoortho/
+#          cp -r autoortho/dist/autoortho.app build/XA-autoortho/
           cp perm.sh build/XA-autoortho/
           cd build && zip -r xa-autoortho.zip XA-autoortho && cd $root
 
