@@ -323,6 +323,7 @@ class ConfigUI(object):
                     self.show_status("Updating config")
                     self.save()
                     self.cfg.load()
+                    self.show_status("Config saved")
                     print(self.cfg.paths)
                 elif event == 'Clean Cache':
                     self.show_status("Cleaning cache")
