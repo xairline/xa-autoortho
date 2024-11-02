@@ -1,63 +1,74 @@
 name: Release
 
-# Controls when the workflow will run
 on:
   push:
-    #    branches: [ main ]
     tags:
       - 'v*'
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: macos-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
       - uses: actions/setup-go@v2
         with:
-          go-version: '^1.18' # The Go version to download (if necessary) and use.
+          go-version: '^1.18'
+
       - uses: actions/cache@v2
         with:
           path: ~/go/pkg/mod
           key: go-mod-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             go-mod-
-      - run: |
+
+      - name: Build Go Binaries
+        run: |
           go mod tidy
-          make mac -j 3
-          rm -f ${{ github.workspace }}/build/XA-autoortho/mac_arm.xpl ${{ github.workspace }}/build/XA-autoortho/mac_amd.xpl
+          # Build for amd64
+          env GOOS=darwin GOARCH=amd64 go build -o build/XA-autoortho/yourapp_amd64
+          # Build for arm64
+          env GOOS=darwin GOARCH=arm64 go build -o build/XA-autoortho/yourapp_arm64
+          # Combine into universal binary
+          lipo -create -output build/XA-autoortho/yourapp build/XA-autoortho/yourapp_amd64 build/XA-autoortho/yourapp_arm64
+          # Clean up individual binaries
+          rm build/XA-autoortho/yourapp_amd64 build/XA-autoortho/yourapp_arm64
 
       - uses: actions/setup-python@v3
         with:
           python-version: '3.12'
 
-      - name: Setup
+      - name: Setup Python Environment
         run: |
           brew install python-tk@3.12
-          root=$(pwd)
-          cd autoortho
-          python3.12 -m pip install -U -r requirements.txt
-          python3.12 -m pip install -U -r requirements-build.txt
-          pyinstaller autoortho.spec
-          cd $root
+          python3.12 -m pip install -U -r autoortho/requirements.txt
+          python3.12 -m pip install -U -r autoortho/requirements-build.txt
 
-      - run: |
+      - name: Build Python Application
+        run: |
+          # Build for amd64
+          python3.12 -m PyInstaller --target-arch x86_64 autoortho.spec
+          mv autoortho/dist/autoortho autoortho/dist/autoortho_amd64
+          # Build for arm64
+          python3.12 -m PyInstaller --target-arch arm64 autoortho.spec
+          mv autoortho/dist/autoortho autoortho/dist/autoortho_arm64
+          # Combine into universal binary
+          lipo -create -output autoortho/dist/autoortho autoortho/dist/autoortho_amd64 autoortho/dist/autoortho_arm64
+          # Clean up individual builds
+          rm -rf autoortho/dist/autoortho_amd64 autoortho/dist/autoortho_arm64
+
+      - name: Prepare Release Artifacts
+        run: |
           root=$(pwd)
-          cp autoortho/dist/autoortho_fuse ${{ github.workspace }}/build/XA-autoortho/
-          cp autoortho/dist/autoortho ${{ github.workspace }}/build/XA-autoortho/
-          cp -r autoortho/dist/autoortho.app ${{ github.workspace }}/build/XA-autoortho/
-          cp perm.sh ${{ github.workspace }}/build/XA-autoortho/
-          cd ${{ github.workspace }}/build/ && zip -r xa-autoortho.zip XA-autoortho && cd $root
+          cp autoortho/dist/autoortho_fuse build/XA-autoortho/
+          cp autoortho/dist/autoortho build/XA-autoortho/
+          cp -r autoortho/dist/autoortho.app build/XA-autoortho/
+          cp perm.sh build/XA-autoortho/
+          cd build && zip -r xa-autoortho.zip XA-autoortho && cd $root
 
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -66,4 +77,4 @@ jobs:
           body_path: ${{ github.workspace }}/README.md
           files: |
             ${{ github.workspace }}/build/xa-autoortho.zip
-          prerelease: false
+          prerelease: true
