@@ -63,7 +63,7 @@ jobs:
           root=$(pwd)
           cp autoortho/dist/autoortho_fuse build/XA-autoortho/
           cp autoortho/dist/autoortho build/XA-autoortho/
-#          cp -r autoortho/dist/autoortho.app build/XA-autoortho/
+          # cp -r autoortho/dist/autoortho.app build/XA-autoortho/
           cp perm.sh build/XA-autoortho/
           cd build && zip -r xa-autoortho.zip XA-autoortho && cd $root
 
