@@ -180,7 +180,7 @@ class ConfigUI(object):
             [
                 sg.Text('Min Zoom Level'),
                 sg.Slider(
-                    range=(0, 20, 1),
+                    range=(0, 16, 1),
                     default_value=self.cfg.autoortho.min_zoom,
                     key='min_zoom',
                     size=(20, 15),
