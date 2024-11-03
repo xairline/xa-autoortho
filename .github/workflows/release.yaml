@@ -134,9 +134,9 @@ jobs:
       - name: Prepare Release Artifacts
         run: |
           cp perm.sh build/XA-autoortho/
-          cd build/XA-autoortho/
-          chmod +x autoortho
-          chmod +x autoortho_fuse
+          cd build
+          chmod +x XA-autoortho/autoortho
+          chmod +x XA-autoortho/autoortho_fuse
           zip -r xa-autoortho.zip XA-autoortho 
           cd ${{ github.workspace }}/build/ && zip -r xa-autoortho.zip XA-autoortho && cd $root
 
