@@ -115,21 +115,17 @@ jobs:
           name: x86_64_artifacts
           path: x86_64_build
 
-      - name: Download arm64 Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: arm64_artifacts
-          path: arm64_build
+     # - name: Download arm64 Artifacts
+     #   uses: actions/download-artifact@v3
+     #   with:
+     #     name: arm64_artifacts
+     #     path: arm64_build
 
       - name: Combine Go Binaries into Universal Binary
         run: |
           mkdir -p build/XA-autoortho
-          lipo -create -output build/XA-autoortho/autoortho \
-            x86_64_build/autoortho \
-            arm64_build/autoortho
-          lipo -create -output build/XA-autoortho/autoortho_fuse \
-            x86_64_build/autoortho_fuse \
-            arm64_build/autoortho_fuse
+          cp x86_64_build/autoortho build/XA-autoortho/autoortho
+          cp x86_64_build/autoortho_fuse build/XA-autoortho/autoortho_fuse
 
       - name: Prepare Release Artifacts
         run: |
