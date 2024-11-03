@@ -132,8 +132,8 @@ jobs:
           chmod +x XA-autoortho/autoortho_fuse
           zip -r xa-autoortho_x86.zip XA-autoortho
           # pack arm64
-          cp arm64_build/autoortho build/XA-autoortho/autoortho
-          cp arm64_build/autoortho_fuse build/XA-autoortho/autoortho_fuse
+          cp arm64_build/autoortho XA-autoortho/autoortho
+          cp arm64_build/autoortho_fuse XA-autoortho/autoortho_fuse
           chmod +x XA-autoortho/autoortho
           chmod +x XA-autoortho/autoortho_fuse
           zip -r xa-autoortho_arm.zip XA-autoortho
