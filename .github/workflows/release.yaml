@@ -115,26 +115,28 @@ jobs:
           name: x86_64_artifacts
           path: x86_64_build
 
-     # - name: Download arm64 Artifacts
-     #   uses: actions/download-artifact@v3
-     #   with:
-     #     name: arm64_artifacts
-     #     path: arm64_build
+      - name: Download arm64 Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: arm64_artifacts
+          path: arm64_build
 
       - name: Combine Go Binaries into Universal Binary
         run: |
           mkdir -p build/XA-autoortho
           cp x86_64_build/autoortho build/XA-autoortho/autoortho
           cp x86_64_build/autoortho_fuse build/XA-autoortho/autoortho_fuse
-
-      - name: Prepare Release Artifacts
-        run: |
           cp perm.sh build/XA-autoortho/
           cd build
           chmod +x XA-autoortho/autoortho
           chmod +x XA-autoortho/autoortho_fuse
-          zip -r xa-autoortho.zip XA-autoortho 
-          cd ${{ github.workspace }}/build/ && zip -r xa-autoortho.zip XA-autoortho && cd $root
+          zip -r xa-autoortho_x86.zip XA-autoortho
+          # pack arm64
+          cp arm64_build/autoortho build/XA-autoortho/autoortho
+          cp arm64_build/autoortho_fuse build/XA-autoortho/autoortho_fuse
+          chmod +x XA-autoortho/autoortho
+          chmod +x XA-autoortho/autoortho_fuse
+          zip -r xa-autoortho_arm.zip XA-autoortho
 
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -142,5 +144,6 @@ jobs:
         with:
           body_path: ${{ github.workspace }}/README.md
           files: |
-            ${{ github.workspace }}/build/xa-autoortho.zip
+            ${{ github.workspace }}/build/xa-autoortho_x86.zip
+            ${{ github.workspace }}/build/xa-autoortho_arm.zip
           prerelease: true
