@@ -87,8 +87,8 @@ jobs:
   combine-binaries:
     name: Combine Binaries and Create Release
     needs:
-      - build_intel
-      - build_arm64
+      - build-intel
+      - build-arm64
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
