@@ -12,7 +12,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  build-intel:
     # The type of runner that the job will run on
     runs-on: macos-13
 
@@ -22,20 +22,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-
-      - uses: actions/setup-go@v2
-        with:
-          go-version: '^1.18' # The Go version to download (if necessary) and use.
-      - uses: actions/cache@v2
-        with:
-          path: ~/go/pkg/mod
-          key: go-mod-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            go-mod-
-      - run: |
-          go mod tidy
-          make mac -j 3
-          rm -f ${{ github.workspace }}/build/XA-autoortho/mac_arm.xpl ${{ github.workspace }}/build/XA-autoortho/mac_amd.xpl
 
       - uses: actions/setup-python@v3
         with:
@@ -55,8 +41,98 @@ jobs:
           root=$(pwd)
           cp autoortho/dist/autoortho_fuse ${{ github.workspace }}/build/XA-autoortho/
           cp autoortho/dist/autoortho ${{ github.workspace }}/build/XA-autoortho/
-          cp -r autoortho/dist/autoortho.app ${{ github.workspace }}/build/XA-autoortho/
-          cp perm.sh ${{ github.workspace }}/build/XA-autoortho/
+
+      - name: Upload x86_64 Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: x86_64_artifacts
+          path: build/XA-autoortho/
+
+  build-arm:
+    # The type of runner that the job will run on
+    runs-on: macos-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.12'
+
+      - name: Setup
+        run: |
+          brew install python-tk@3.12
+          root=$(pwd)
+          cd autoortho
+          python3.12 -m pip install -U -r requirements.txt
+          python3.12 -m pip install -U -r requirements-build.txt
+          pyinstaller autoortho.spec
+          cd $root
+
+      - run: |
+          root=$(pwd)
+          cp autoortho/dist/autoortho_fuse ${{ github.workspace }}/build/XA-autoortho/
+          cp autoortho/dist/autoortho ${{ github.workspace }}/build/XA-autoortho/
+
+      - name: Upload x86_64 Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: arm64_artifacts
+          path: build/XA-autoortho/
+
+  combine-binaries:
+    name: Combine Binaries and Create Release
+    needs:
+      - build_x86_64
+      - build_arm64
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.18' # The Go version to download (if necessary) and use.
+      - uses: actions/cache@v2
+        with:
+          path: ~/go/pkg/mod
+          key: go-mod-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            go-mod-
+      - run: |
+          go mod tidy
+          make mac -j 3
+          rm -f ${{ github.workspace }}/build/XA-autoortho/mac_arm.xpl ${{ github.workspace }}/build/XA-autoortho/mac_amd.xpl
+      - name: Download x86_64 Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: x86_64_artifacts
+          path: x86_64_build
+
+      - name: Download arm64 Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: arm64_artifacts
+          path: arm64_build
+
+      - name: Combine Go Binaries into Universal Binary
+        run: |
+          mkdir -p build/XA-autoortho
+          lipo -create -output build/XA-autoortho/autoortho \
+            x86_64_build/autoortho \
+            arm64_build/autoortho
+          lipo -create -output build/XA-autoortho/autoortho_fuse \
+            x86_64_build/autoortho_fuse \
+            arm64_build/autoortho_fuse
+
+      - name: Prepare Release Artifacts
+        run: |
+          cp perm.sh build/XA-autoortho/
+          cd build && zip -r xa-autoortho.zip XA-autoortho 
           cd ${{ github.workspace }}/build/ && zip -r xa-autoortho.zip XA-autoortho && cd $root
 
       - name: Release

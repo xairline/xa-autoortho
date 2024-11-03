@@ -54,7 +54,7 @@ app1 = BUNDLE(
 a = Analysis(
     ['autoortho/autoortho_fuse.py'],
     pathex=[],
-    binaries=[('autoortho/lib/darwin_arm/libispc_texcomp.dylib', '.'),  # Adjust destination path if needed
+    binaries=[('autoortho/lib/darwin/libispc_texcomp.dylib', '.'),  # Adjust destination path if needed
                       ('autoortho/aoimage/aoimage.dylib', '.')],
     datas=[
          (certifi.where(), '.'),
