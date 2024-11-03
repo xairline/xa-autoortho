@@ -24,8 +24,6 @@ from refuse.high import FUSE, FuseOSError, Operations, fuse_get_context, _libfus
 
 import getortho
 
-print(f"LIBFUSE: {id(_libfuse)} : {_libfuse}")
-
 
 def deg2num(lat_deg, lon_deg, zoom):
     lat_rad = math.radians(lat_deg)
