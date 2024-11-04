@@ -66,12 +66,6 @@ func (a *autoorthoService) LaunchAutoortho() error {
 			select {
 			case <-a.ctx.Done():
 				a.Logger.Infof("Autoortho service is stopping: %s", strings.Split(mount, "|")[1])
-				a.Logger.Infof("Creating poison file: %s", poisonFile)
-				poisonFile := path.Join(strings.Split(mount, "|")[1], ".poison")
-				_, err := os.Create(poisonFile)
-				if err != nil {
-					a.Logger.Errorf("Error creating poison file: %v", err)
-				}
 				a.wg.Done()
 			}
 			// Wait for the command to finish
