@@ -648,7 +648,6 @@ class Tile(object):
 
         if self.seasons_enabled:
             saturation = 0.01 * ao_seasons.saturation(self.row, self.col, self.zoom)
-            log.info(f"Saturation: {saturation}")
             if saturation < 1.0:  # desaturation is expensive
                 im = im.copy().desaturate(saturation)
 
