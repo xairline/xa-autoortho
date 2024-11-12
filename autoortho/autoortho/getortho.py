@@ -13,6 +13,7 @@ from urllib.request import urlopen, Request
 import psutil
 import requests
 
+import aoseasons
 import pydds
 from aoconfig import CFG
 from aoimage import AoImage
@@ -20,11 +21,11 @@ from aoimage import AoImage
 from aostats import STATS, StatTracker, set_stat, inc_stat, get_stat
 
 log = logging.getLogger(__name__)
-
 # Track average fetch times
 tile_stats = StatTracker(20, 12)
 mm_stats = StatTracker(0, 5)
 partial_stats = StatTracker()
+ao_seasons = None
 
 
 def _is_jpeg(dataheader):
@@ -404,9 +405,10 @@ class Tile(object):
         self.dds = pydds.DDS(self.width * 256, self.height * 256, ispc=use_ispc,
                              dxt_format=CFG.pydds.format)
         self.id = f"{row}_{col}_{maptype}_{zoom}"
-
-        # in % in the CFG
-        self.saturation = 0.01 * float(CFG.coloring.saturation)
+        self.seasons_enabled = CFG.seasons.enabled
+        global ao_seasons
+        if ao_seasons is None:
+            ao_seasons = aoseasons.AoSeasonCache(self.cache_dir)
 
     def __lt__(self, other):
         return self.priority < other.priority
@@ -641,8 +643,13 @@ class Tile(object):
         if im is None:
             return None
 
-        if self.saturation < 1.0:
-            im = im.copy().desaturate(self.saturation)
+        log.info(f"GET_IMG: {self} : Retrieved mipmap for ZOOM: {self.zoom} MIPMAP: {mipmap}")
+        log.info(f"seasons_enabled: {self.seasons_enabled}")
+
+        if self.seasons_enabled:
+            saturation = 0.01 * ao_seasons.saturation(self.row, self.col, self.zoom)
+            if saturation < 1.0:  # desaturation is expensive
+                im = im.copy().desaturate(saturation)
 
         return im
 
@@ -939,6 +946,11 @@ class TileCacher(object):
 
         self.clean_t = threading.Thread(target=self.clean, daemon=True)
         self.clean_t.start()
+
+        global ao_seasons
+        self.seasons_enabled = CFG.seasons.enabled
+        if ao_seasons is None:
+            ao_seasons = aoseasons.AoSeasonCache(self.cache_dir)
 
         if platform.system() == 'Windows':
             # Windows doesn't handle FS cache the same way so enable here.

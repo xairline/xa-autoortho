@@ -167,17 +167,6 @@ class ConfigUI(object):
                 # ),
             ],
             [
-                sg.Text('Saturation'),
-                sg.Slider(
-                    range=(0, 100, 5),
-                    default_value=self.cfg.coloring.saturation,
-                    key='saturation',
-                    size=(20, 15),
-                    orientation='horizontal',
-                    metadata={'section': self.cfg.coloring}
-                ),
-            ],
-            [
                 sg.Text('Min Zoom Level'),
                 sg.Slider(
                     range=(0, 16, 1),
@@ -234,6 +223,67 @@ class ConfigUI(object):
         # scenery.append([sg.Text(key='-EXPAND-', font='ANY 1', pad=(0,0))])
         # scenery.append([sg.StatusBar("...", size=(74,3), key="status", auto_size_text=True, expand_x=True)])
 
+        seasons = [
+            [sg.HorizontalSeparator(pad=5)],
+            [
+                sg.Radio('Enabled', group_id=1, default=self.cfg.seasons.enabled,
+                         key='seasons-enabled', enable_events=True),
+                sg.Radio('Disabled', group_id=1, default=not self.cfg.seasons.enabled,
+                         key='seasons-disabled', enable_events=True)
+            ],
+            [sg.HorizontalSeparator(pad=5)],
+            [
+                sg.Text('Spring Saturation'),
+                sg.Slider(
+                    range=(0, 100, 5),
+                    default_value=self.cfg.seasons.spr_saturation,
+                    key='spr_saturation',
+                    size=(20, 15),
+                    orientation='horizontal',
+                    metadata={'section': self.cfg.seasons}
+                ),
+            ],
+
+            [sg.HorizontalSeparator(pad=5)],
+            [
+                sg.Text('Summer Saturation'),
+                sg.Slider(
+                    range=(0, 100, 5),
+                    default_value=self.cfg.seasons.sum_saturation,
+                    key='sum_saturation',
+                    size=(20, 15),
+                    orientation='horizontal',
+                    metadata={'section': self.cfg.seasons}
+                ),
+            ],
+
+            [sg.HorizontalSeparator(pad=5)],
+            [
+                sg.Text('Fall Saturation'),
+                sg.Slider(
+                    range=(0, 100, 5),
+                    default_value=self.cfg.seasons.fal_saturation,
+                    key='fal_saturation',
+                    size=(20, 15),
+                    orientation='horizontal',
+                    metadata={'section': self.cfg.seasons}
+                ),
+            ],
+
+            [sg.HorizontalSeparator(pad=5)],
+            [
+                sg.Text('Winter Saturation'),
+                sg.Slider(
+                    range=(0, 100, 5),
+                    default_value=self.cfg.seasons.win_saturation,
+                    key='win_saturation',
+                    size=(20, 15),
+                    orientation='horizontal',
+                    metadata={'section': self.cfg.seasons}
+                ),
+            ],
+
+        ]
         #
         # Console logs tab
         #
@@ -258,6 +308,7 @@ class ConfigUI(object):
                 [[
                     sg.Tab('Setup', setup),
                     sg.Tab('Scenery', [[scenery_column]]),
+                    sg.Tab('Seasons', seasons),
                     sg.Tab('Logs', logs)
                 ]])
             ],
@@ -348,6 +399,9 @@ class ConfigUI(object):
                     button.update(disabled=True)
                     regionid = event.split("-")[1]
                     self.scenery_q.put(regionid)
+                elif event.startswith("seasons-"):
+                    self.cfg.load()
+                    self.cfg.seasons.enabled = (event.split("-")[1] == "enabled")
                 elif self.show_errs:
                     font = ("Helventica", 14)
                     sg.popup("\n".join(self.show_errs), title="ERROR!", font=font)

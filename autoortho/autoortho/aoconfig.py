@@ -102,8 +102,12 @@ file_cache_size = 30
 [windows]
 prefer_winfsp = False
 
-[coloring]
-saturation = 100
+[seasons]
+enabled = False
+spr_saturation = 70.0
+sum_saturation = 100.0
+fal_saturation = 80.0
+win_saturation = 55.0
 """
 
     def __init__(self, conf_file=None):
