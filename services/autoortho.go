@@ -136,6 +136,7 @@ func NewAutoorthoService(logger logger.Logger, pluginPath string) AutoorthoServi
 			pluginPath: pluginPath,
 			ctx:        ctx,
 			cancel:     cancel,
+			wg:         sync.WaitGroup{},
 		}
 		return autoorthoSvc
 	}
