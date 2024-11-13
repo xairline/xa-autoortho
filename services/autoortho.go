@@ -65,13 +65,14 @@ func (a *autoorthoService) LaunchAutoortho() error {
 			if err != nil {
 				a.Logger.Errorf("Warning unmounting: %v", err)
 			}
-			cmd := exec.Command(
+			cmd := exec.CommandContext(a.ctx,
 				a.pluginPath+"/autoortho_fuse",
 				strings.Split(mount, "|")[0],
 				strings.Split(mount, "|")[1],
 			)
 			cmd.Stdout = file
 			cmd.Stderr = file
+			cmd.Run()
 			// Start the command without waiting for it to complete
 			if err := cmd.Start(); err != nil {
 				a.Logger.Errorf("Error starting command: %v", err)
