@@ -58,7 +58,6 @@ func (a *autoorthoService) LaunchAutoortho() error {
 			)
 			cmd.Stdout = file
 			cmd.Stderr = file
-			cmd.Run()
 			// Start the command without waiting for it to complete
 			if err := cmd.Start(); err != nil {
 				a.Logger.Errorf("Error starting command: %v", err)
@@ -80,6 +79,11 @@ func (a *autoorthoService) LaunchAutoortho() error {
 			if err != nil {
 				a.Logger.Errorf("Command finished with error: %v", err)
 			} else {
+				poisonFile := path.Join(strings.Split(mount, "|")[1], ".poison")
+				_, err := os.Create(poisonFile)
+				if err != nil {
+					a.Logger.Errorf("Error creating poison file: %v", err)
+				}
 				a.Logger.Infof("Command finished successfully")
 			}
 		}(mount)
