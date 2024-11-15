@@ -146,4 +146,4 @@ jobs:
           files: |
             ${{ github.workspace }}/build/xa-autoortho_x86.zip
             ${{ github.workspace }}/build/xa-autoortho_arm.zip
-          prerelease: true
+          prerelease: ${{ contains(github.ref_name, '-') }}
