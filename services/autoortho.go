@@ -59,12 +59,6 @@ func (a *autoorthoService) LaunchAutoortho() error {
 			}
 			defer file.Close()
 			os.Remove(poisonFile)
-
-			// incase we have left over fuse mount
-			err = exec.Command("umount", strings.Split(mount, "|")[1]).Run()
-			if err != nil {
-				a.Logger.Errorf("Warning unmounting: %v", err)
-			}
 			cmd := exec.CommandContext(a.ctx,
 				a.pluginPath+"/autoortho_fuse",
 				strings.Split(mount, "|")[0],
@@ -109,6 +103,11 @@ func (a *autoorthoService) LaunchAutoortho() error {
 			if err != nil {
 				a.Logger.Errorf("Command finished with error: %v", err)
 			} else {
+				poisonFile := path.Join(strings.Split(mount, "|")[1], ".poison")
+				_, err := os.Create(poisonFile)
+				if err != nil {
+					a.Logger.Errorf("Error creating poison file: %v", err)
+				}
 				a.Logger.Infof("Command finished successfully")
 			}
 		}(mount)
