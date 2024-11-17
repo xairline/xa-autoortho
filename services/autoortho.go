@@ -27,11 +27,12 @@ type AutoorthoService interface {
 }
 
 type autoorthoService struct {
-	Logger     logger.Logger
-	pluginPath string
-	ctx        context.Context
-	cancel     context.CancelFunc
-	wg         sync.WaitGroup
+	Logger            logger.Logger
+	pluginPath        string
+	ctx               context.Context
+	cancel            context.CancelFunc
+	wg                sync.WaitGroup
+	loadFlightOnStart bool
 }
 
 func (a *autoorthoService) Umount() {
@@ -59,14 +60,19 @@ func (a *autoorthoService) LaunchAutoortho() error {
 			}
 			defer file.Close()
 			os.Remove(poisonFile)
-			cmd := exec.CommandContext(a.ctx,
+
+			// incase we have left over fuse mount
+			err = exec.Command("umount", strings.Split(mount, "|")[1]).Run()
+			if err != nil {
+				a.Logger.Errorf("Warning unmounting: %v", err)
+			}
+			cmd := exec.Command(
 				a.pluginPath+"/autoortho_fuse",
 				strings.Split(mount, "|")[0],
 				strings.Split(mount, "|")[1],
 			)
 			cmd.Stdout = file
 			cmd.Stderr = file
-			cmd.Run()
 			// Start the command without waiting for it to complete
 			if err := cmd.Start(); err != nil {
 				a.Logger.Errorf("Error starting command: %v", err)
@@ -103,17 +109,15 @@ func (a *autoorthoService) LaunchAutoortho() error {
 			if err != nil {
 				a.Logger.Errorf("Command finished with error: %v", err)
 			} else {
-				poisonFile := path.Join(strings.Split(mount, "|")[1], ".poison")
-				_, err := os.Create(poisonFile)
-				if err != nil {
-					a.Logger.Errorf("Error creating poison file: %v", err)
-				}
 				a.Logger.Infof("Command finished successfully")
 			}
 		}(mount)
 	}
 	// Wait for all cmd.Start() calls to complete
-	cmdStartWG.Wait()
+	if a.loadFlightOnStart {
+		a.Logger.Infof("Locked, waiting for AO ready")
+		cmdStartWG.Wait()
+	}
 	return nil
 }
 
@@ -152,7 +156,7 @@ func (a *autoorthoService) getMounts() []string {
 	return res
 }
 
-func NewAutoorthoService(logger logger.Logger, pluginPath string) AutoorthoService {
+func NewAutoorthoService(logger logger.Logger, pluginPath string, loadFlightOnStart bool) AutoorthoService {
 	if autoorthoSvc != nil {
 		logger.Info("Autoortho SVC has been initialized already")
 		return autoorthoSvc
@@ -162,11 +166,12 @@ func NewAutoorthoService(logger logger.Logger, pluginPath string) AutoorthoServi
 		defer autoorthoSvcLock.Unlock()
 		ctx, cancel := context.WithCancel(context.Background())
 		autoorthoSvc = &autoorthoService{
-			Logger:     logger,
-			pluginPath: pluginPath,
-			ctx:        ctx,
-			cancel:     cancel,
-			wg:         sync.WaitGroup{},
+			Logger:            logger,
+			pluginPath:        pluginPath,
+			ctx:               ctx,
+			cancel:            cancel,
+			wg:                sync.WaitGroup{},
+			loadFlightOnStart: loadFlightOnStart,
 		}
 		return autoorthoSvc
 	}
