@@ -1,28 +1,6 @@
 # xa-autoortho
 
 
->NOTE: WIP MAJOR REFACTORING IN PROGRESS
-
->NOTE: ONLY WORKS ON MAC SILICON
-
->NOTE: DO NOT USE UNLESS YOU HAVE TALKED TO ME
-
-## Features
-
-- [x] remove Python phase 1 (pack all dependencies in a binary)
-
-- [x] auto mount with xplane loading
-
-- [x] allow install new scenery
-
-- [ ] add seasonal adjustment for ortho images
-
-- [ ] new ui in xplane
-
-- [ ] complete remove Python
-
-- [ ] support new xplane format
-
 ## HOW TO INSTALL
 
 1. Download [latest version](https://github.com/xairline/xa-autoortho/releases/latest) from github
