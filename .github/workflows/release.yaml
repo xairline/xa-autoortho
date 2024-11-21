@@ -131,12 +131,43 @@ jobs:
           chmod +x XA-autoortho/autoortho
           chmod +x XA-autoortho/autoortho_fuse
           zip -r xa-autoortho_x86.zip XA-autoortho
+          mkdir -p release/xa-autoortho/x86
+          cp -r XA-autoortho release/xa-autoortho/x86
+          cp skunkcrafts_updater.cfg release/xa-autoortho/x86
+          sed -i '' "s/REPLACE_ME/${TAG}/g" release/xa-autoortho/x86/skunkcrafts_updater.cfg
+          sed -i '' "s/@ARCH@/x86/g" release/xa-autoortho/x86/skunkcrafts_updater.cfg
+          RELEASE_FOLDER=release/xa-autoortho/x86
+          find ${RELEASE_FOLDER}/ -type f ! \( -name '*skunkcrafts_updater*' -o -path '*skunkcrafts_updater*' \) -print0 | while IFS= read -r -d '' file; do
+            checksum_hex=$(crc32 "$file")
+            # Convert hex checksum to uint32 decimal
+            checksum_decimal=$((16#$checksum_hex))
+            # Remove "release/" prefix from $file
+            modified_file="${file#${RELEASE_FOLDER}/}"
+            echo "$modified_file|$checksum_decimal" >> ${RELEASE_FOLDER}/skunkcrafts_updater_whitelist.txt
+          done
+          touch ${RELEASE_FOLDER}/skunkcrafts_updater_blacklist.txt
+          
           # pack arm64
           cp ../arm64_build/autoortho XA-autoortho/autoortho
           cp ../arm64_build/autoortho_fuse XA-autoortho/autoortho_fuse
           chmod +x XA-autoortho/autoortho
           chmod +x XA-autoortho/autoortho_fuse
           zip -r xa-autoortho_arm.zip XA-autoortho
+          mkdir -p release/xa-autoortho/arm
+          cp -r XA-autoortho release/xa-autoortho/arm
+          cp skunkcrafts_updater.cfg release/xa-autoortho/arm
+          sed -i '' "s/REPLACE_ME/${TAG}/g" release/xa-autoortho/arm/skunkcrafts_updater.cfg
+          sed -i '' "s/@ARCH@/arm/g" release/xa-autoortho/arm/skunkcrafts_updater.cfg
+          RELEASE_FOLDER=release/xa-autoortho/arm
+          find ${RELEASE_FOLDER}/ -type f ! \( -name '*skunkcrafts_updater*' -o -path '*skunkcrafts_updater*' \) -print0 | while IFS= read -r -d '' file; do
+            checksum_hex=$(crc32 "$file")
+            # Convert hex checksum to uint32 decimal
+            checksum_decimal=$((16#$checksum_hex))
+            # Remove "release/" prefix from $file
+            modified_file="${file#${RELEASE_FOLDER}/}"
+            echo "$modified_file|$checksum_decimal" >> ${RELEASE_FOLDER}/skunkcrafts_updater_whitelist.txt
+          done
+          touch ${RELEASE_FOLDER}/skunkcrafts_updater_blacklist.txt
 
       - name: Release
         uses: softprops/action-gh-release@v1
