@@ -123,6 +123,7 @@ jobs:
 
       - name: Combine Go Binaries into Universal Binary
         run: |
+          TAG=${GITHUB_REF##*/}
           mkdir -p build/XA-autoortho
           cp x86_64_build/autoortho build/XA-autoortho/autoortho
           cp x86_64_build/autoortho_fuse build/XA-autoortho/autoortho_fuse
