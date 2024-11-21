@@ -168,6 +168,14 @@ jobs:
             echo "$modified_file|$checksum_decimal" >> ${RELEASE_FOLDER}/skunkcrafts_updater_whitelist.txt
           done
           touch ${RELEASE_FOLDER}/skunkcrafts_updater_blacklist.txt
+          
+          # push to release branch
+          git checkout -b release
+          git config --global user.email "release@opensam.com"
+          git config --global user.name "GH Release"
+          git add release/
+          git commit -m "Release ${VERSION}"
+          git push -f -u origin release
 
       - name: Release
         uses: softprops/action-gh-release@v1
