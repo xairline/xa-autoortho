@@ -23,14 +23,7 @@ Submit the following information:
 3. If you have UI issue, submit the console log of UI, aka output in the terminal when you run the UI
 
 ## How to debug/run manually
-The plugin is basically running `./arutoortho_fuse` for you when xplane loads. if you don't want that:
-1. remove the mac.xpl file
-2. run `autoortho_fuse` with right arguments
-   example:
-   ```
-   autoortho_fuse "/Users/XXXXXX/X-Plane 12/Custom Scenery/z_autoortho/scenery/z_ao_afr" "/Users/XXXX/X-Plane 12/Custom Scenery/z_ao_afr"
-   ```
-   the syntax is `autoortho_fuse PATH_TO_SCENERY PATH_TO_MOUNT`. for more information, check the org post/origina AO docs/code
+use `autoortho` and click `run`
 
 ## How to fix broken AO tiles
 
