@@ -132,7 +132,7 @@ jobs:
           chmod +x XA-autoortho/autoortho_fuse
           zip -r xa-autoortho_x86.zip XA-autoortho
           mkdir -p ${{ github.workspace }}/release/xa-autoortho/x86
-          cp -r XA-autoortho ${{ github.workspace }}/release/xa-autoortho/x86
+          cp -r XA-autoortho/* ${{ github.workspace }}/release/xa-autoortho/x86
           cp ${{ github.workspace }}/skunkcrafts_updater.cfg ${{ github.workspace }}/release/xa-autoortho/x86
           sed -i '' "s/REPLACE_ME/${TAG}/g" ${{ github.workspace }}/release/xa-autoortho/x86/skunkcrafts_updater.cfg
           sed -i '' "s/@ARCH@/x86/g" ${{ github.workspace }}/release/xa-autoortho/x86/skunkcrafts_updater.cfg
@@ -154,7 +154,7 @@ jobs:
           chmod +x XA-autoortho/autoortho_fuse
           zip -r xa-autoortho_arm.zip XA-autoortho
           mkdir -p ${{ github.workspace }}/release/xa-autoortho/arm
-          cp -r XA-autoortho ${{ github.workspace }}/release/xa-autoortho/arm
+          cp -r XA-autoortho/* ${{ github.workspace }}/release/xa-autoortho/arm
           cp ${{ github.workspace }}/skunkcrafts_updater.cfg ${{ github.workspace }}/release/xa-autoortho/arm
           sed -i '' "s/REPLACE_ME/${TAG}/g" ${{ github.workspace }}/release/xa-autoortho/arm/skunkcrafts_updater.cfg
           sed -i '' "s/@ARCH@/arm/g" ${{ github.workspace }}/release/xa-autoortho/arm/skunkcrafts_updater.cfg
