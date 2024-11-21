@@ -33,5 +33,8 @@ The plugin is basically running `./arutoortho_fuse` for you when xplane loads. i
    the syntax is `autoortho_fuse PATH_TO_SCENERY PATH_TO_MOUNT`. for more information, check the org post/origina AO docs/code
 
 ## How to fix broken AO tiles
+
+Video:
+
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/f3gU3oHv4BA/0.jpg)](https://www.youtube.com/watch?v=f3gU3oHv4BA)
 
