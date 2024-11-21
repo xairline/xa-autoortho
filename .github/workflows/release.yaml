@@ -173,7 +173,7 @@ jobs:
           git checkout -b release
           git config --global user.email "release@opensam.com"
           git config --global user.name "GH Release"
-          git add -f release/
+          git add -f ${{ github.workspace }}/release/
           git commit -m "Release ${VERSION}"
           git push -f -u origin release
 
