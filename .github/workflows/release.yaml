@@ -133,7 +133,7 @@ jobs:
           zip -r xa-autoortho_x86.zip XA-autoortho
           mkdir -p release/xa-autoortho/x86
           cp -r XA-autoortho release/xa-autoortho/x86
-          cp skunkcrafts_updater.cfg release/xa-autoortho/x86
+          cp ${{ github.workspace }}/skunkcrafts_updater.cfg release/xa-autoortho/x86
           sed -i '' "s/REPLACE_ME/${TAG}/g" release/xa-autoortho/x86/skunkcrafts_updater.cfg
           sed -i '' "s/@ARCH@/x86/g" release/xa-autoortho/x86/skunkcrafts_updater.cfg
           RELEASE_FOLDER=release/xa-autoortho/x86
@@ -155,7 +155,7 @@ jobs:
           zip -r xa-autoortho_arm.zip XA-autoortho
           mkdir -p release/xa-autoortho/arm
           cp -r XA-autoortho release/xa-autoortho/arm
-          cp skunkcrafts_updater.cfg release/xa-autoortho/arm
+          cp ${{ github.workspace }}/skunkcrafts_updater.cfg release/xa-autoortho/arm
           sed -i '' "s/REPLACE_ME/${TAG}/g" release/xa-autoortho/arm/skunkcrafts_updater.cfg
           sed -i '' "s/@ARCH@/arm/g" release/xa-autoortho/arm/skunkcrafts_updater.cfg
           RELEASE_FOLDER=release/xa-autoortho/arm
