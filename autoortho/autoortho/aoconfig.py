@@ -158,6 +158,7 @@ win_saturation = 55.0
         sceneries = []
         if os.path.exists(self.ao_scenery_path):
             sceneries = os.listdir(self.ao_scenery_path)
+            sceneries = [s for s in sceneries if s != '.DS_Store']
             print(f"Found sceneries: {sceneries}")
 
         self.scenery_mounts = [{

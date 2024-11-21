@@ -8,7 +8,10 @@ a1 = Analysis(
     pathex=[],
     binaries=[
     ('autoortho/imgs/splash.png','imgs'),
-    ('autoortho/imgs/banner1.png','imgs')],
+    ('autoortho/imgs/banner1.png','imgs'),
+    ('autoortho/lib/darwin/libispc_texcomp.dylib', '.'),
+                  ('autoortho/lib/darwin/libstbdxt.dylib', '.'),
+                          ('autoortho/aoimage/aoimage.dylib', '.')],
     datas=[
          (certifi.where(), '.'),
     ],
