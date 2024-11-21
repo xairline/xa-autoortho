@@ -81,7 +81,6 @@ Do not go further unless you know that your AO installation is working!
 
 > Note
 >
-> Just like the the AO volume, the AO patch volume will not be visible from Finder when FUSE volumes are mounted .
-> You may can use Terminal to see it (use “ls” command.)
+> Just like the the AO FOLDER  the AO patch FOLDER will not be visible from Finder when FUSE volumes are mounted . You can use Terminal to see it (use “ls” command.)
 
 
