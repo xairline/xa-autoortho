@@ -144,6 +144,7 @@ jobs:
             checksum_decimal=$((16#$checksum_hex))
             # Remove "release/" prefix from $file
             modified_file="${file#${RELEASE_FOLDER}/}"
+            modified_file="${modified_file#/}"
             echo "$modified_file|$checksum_decimal" >> ${RELEASE_FOLDER}/skunkcrafts_updater_whitelist.txt
           done
           touch ${RELEASE_FOLDER}/skunkcrafts_updater_blacklist.txt
@@ -166,6 +167,7 @@ jobs:
             checksum_decimal=$((16#$checksum_hex))
             # Remove "release/" prefix from $file
             modified_file="${file#${RELEASE_FOLDER}/}"
+            modified_file="${modified_file#/}"
             echo "$modified_file|$checksum_decimal" >> ${RELEASE_FOLDER}/skunkcrafts_updater_whitelist.txt
           done
           touch ${RELEASE_FOLDER}/skunkcrafts_updater_blacklist.txt
