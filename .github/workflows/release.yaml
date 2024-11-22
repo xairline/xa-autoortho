@@ -131,7 +131,6 @@ jobs:
           cd build
           chmod +x XA-autoortho/autoortho
           chmod +x XA-autoortho/autoortho_fuse
-          zip -r xa-autoortho_x86.zip XA-autoortho
           mkdir -p ${{ github.workspace }}/release/xa-autoortho/x86
           cp -r XA-autoortho/* ${{ github.workspace }}/release/xa-autoortho/x86
           cp ${{ github.workspace }}/skunkcrafts_updater.cfg ${{ github.workspace }}/release/xa-autoortho/x86
@@ -148,13 +147,16 @@ jobs:
             echo "$modified_file|$checksum_decimal" >> ${RELEASE_FOLDER}/skunkcrafts_updater_whitelist.txt
           done
           touch ${RELEASE_FOLDER}/skunkcrafts_updater_blacklist.txt
+          cp ${{ github.workspace }}/release/xa-autoortho/x86/skunkcrafts_updater.cfg XA-autoortho/skunkcrafts_updater.cfg
+          cp ${{ github.workspace }}/release/xa-autoortho/x86/skunkcrafts_updater_whitelist.txt XA-autoortho/skunkcrafts_updater_whitelist.txt
+          cp ${{ github.workspace }}/release/xa-autoortho/x86/skunkcrafts_updater_blacklist.txt XA-autoortho/skunkcrafts_updater_blacklist.txt
+          zip -r xa-autoortho_x86.zip XA-autoortho
           
           # pack arm64
           cp ../arm64_build/autoortho XA-autoortho/autoortho
           cp ../arm64_build/autoortho_fuse XA-autoortho/autoortho_fuse
           chmod +x XA-autoortho/autoortho
           chmod +x XA-autoortho/autoortho_fuse
-          zip -r xa-autoortho_arm.zip XA-autoortho
           mkdir -p ${{ github.workspace }}/release/xa-autoortho/arm
           cp -r XA-autoortho/* ${{ github.workspace }}/release/xa-autoortho/arm
           cp ${{ github.workspace }}/skunkcrafts_updater.cfg ${{ github.workspace }}/release/xa-autoortho/arm
@@ -171,6 +173,10 @@ jobs:
             echo "$modified_file|$checksum_decimal" >> ${RELEASE_FOLDER}/skunkcrafts_updater_whitelist.txt
           done
           touch ${RELEASE_FOLDER}/skunkcrafts_updater_blacklist.txt
+          cp ${{ github.workspace }}/release/xa-autoortho/arm/skunkcrafts_updater.cfg XA-autoortho/skunkcrafts_updater.cfg
+          cp ${{ github.workspace }}/release/xa-autoortho/arm/skunkcrafts_updater_whitelist.txt XA-autoortho/skunkcrafts_updater_whitelist.txt
+          cp ${{ github.workspace }}/release/xa-autoortho/arm/skunkcrafts_updater_blacklist.txt XA-autoortho/skunkcrafts_updater_blacklist.txt
+          zip -r xa-autoortho_arm.zip XA-autoortho
           
           # push to release branch
           git checkout -b release
