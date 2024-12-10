@@ -6,6 +6,7 @@ package services
 
 import (
 	"bufio"
+	"context"
 	"github.com/xairline/goplane/extra"
 	"github.com/xairline/goplane/xplm/utilities"
 	"github.com/xairline/xa-autoortho/utils/logger"
@@ -26,6 +27,7 @@ type xplaneService struct {
 	AutoorthoSvc      AutoorthoService
 	Logger            logger.Logger
 	LoadFlightOnStart bool
+	cancelFunc        context.CancelFunc
 }
 
 var xplaneSvcLock = &sync.Mutex{}
@@ -41,11 +43,12 @@ func NewXplaneService(
 		logger.Info("Xplane SVC: initializing")
 		xplaneSvcLock.Lock()
 		defer xplaneSvcLock.Unlock()
-
+		_, cancelFunc := context.WithCancel(context.Background())
 		xplaneSvc := &xplaneService{
 			Plugin:            extra.NewPlugin("XA Autoortho Launcher", "com.github.xairline.xa-autoortho", "A plugin that automatically launches AutoOrtho "),
 			Logger:            logger,
 			LoadFlightOnStart: false,
+			cancelFunc:        cancelFunc,
 		}
 		xplaneSvc.Plugin.SetPluginStateCallback(xplaneSvc.onPluginStateChanged)
 		return xplaneSvc
@@ -96,4 +99,5 @@ func (s *xplaneService) onPluginStart() {
 func (s *xplaneService) onPluginStop() {
 	s.AutoorthoSvc.Umount()
 	s.Logger.Info("Plugin stopped")
+	s.cancelFunc()
 }
