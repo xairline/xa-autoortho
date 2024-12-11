@@ -99,15 +99,15 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: '1.21.5' # The Go version to download (if necessary) and use.
-      - uses: actions/cache@v2
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
         with:
-          path: ~/go/pkg/mod
-          key: go-mod-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            go-mod-
+          toolchain: stable # or specify a version like '1.72.0'
+          profile: minimal
+          override: true
       - run: |
-          go mod tidy
-          make mac -j 3
+          cargo install cross
+          make mac
           rm -f ${{ github.workspace }}/build/XA-autoortho/mac_arm.xpl ${{ github.workspace }}/build/XA-autoortho/mac_amd.xpl
       - name: Download x86_64 Artifacts
         uses: actions/download-artifact@v3
