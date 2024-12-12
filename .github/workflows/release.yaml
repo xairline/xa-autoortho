@@ -88,9 +88,9 @@ jobs:
 
   combine-binaries:
     name: Combine Binaries and Create Release
-    needs:
-      - build-intel
-      - build-arm
+    #    needs:
+    #      - build-intel
+    #      - build-arm
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
@@ -106,6 +106,7 @@ jobs:
           profile: minimal
           override: true
       - run: |
+          rustup target add x86_64-apple-darwin
           cargo install cross
           make mac
           rm -f ${{ github.workspace }}/build/XA-autoortho/mac_arm.xpl ${{ github.workspace }}/build/XA-autoortho/mac_amd.xpl
