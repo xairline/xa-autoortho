@@ -4,6 +4,7 @@ current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
 dev:
 	cargo build
 	mv target/debug/libxa_autoortho.dylib build/XA-autoortho/mac.xpl
+	cp build/XA-autoortho/mac.xpl ~/X-Plane\ 12/Resources/plugins/XA-autoortho/mac.xpl
 
 mac:
 	cargo build --release --target aarch64-apple-darwin

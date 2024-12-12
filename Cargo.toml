@@ -6,6 +6,7 @@ edition = "2021"
 
 [dependencies]
 xplm = { git = "https://github.com/samcrow/rust-xplm", branch = "master" }
+xplm-sys = "0.5.1"
 
 [profile.dev]
 opt-level = 2

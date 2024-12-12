@@ -303,6 +303,7 @@ name = "xa_autoortho"
 version = "0.1.0"
 dependencies = [
  "xplm",
+ "xplm-sys",
 ]
 
 [[package]]
